@@ -1,15 +1,21 @@
-# Projeto de Predição para Custo com Água
+# Predição de Custos com Água - Prefeitura de Belo Horizonte
 
-# Estrutura do Projeto
+Este projeto visa analisar os dados de consumo de água da prefeitura, com o objetivo de prever custos futuros com base nos registros a partir do ano de 2022. 
+
+---
+
+## Estrutura do Projeto
+
+A organização dos diretórios segue o modelo abaixo:
 
 ```plaintext
-project/
+water_prediction/
 ├── data/
 │   ├── raw/           # Dados brutos (registros originais de 2022, 2023, 2024)
 │   ├── processed/     # Dados processados para análises e modelagem
 │   └── external/      # Dados de fontes externas (se houver)
 ├── notebooks/
-│   ├── EDA/           # Notebooks de análise exploratória de dados
+│   ├── eda/           # Notebooks de análise exploratória de dados
 │   ├── modeling/      # Notebooks relacionados à modelagem preditiva
 │   └── visualization/ # Notebooks para visualizações e relatórios
 ├── scripts/
@@ -23,7 +29,6 @@ project/
 │   ├── pdfs/          # Relatórios finais ou intermediários
 │   └── markdown/      # Relatórios e documentações em Markdown
 ├── tests/             # Scripts de teste para os modelos e pipelines
-├── environment.yml    # Configuração do ambiente (Anaconda/Miniconda)
 ├── requirements.txt   # Dependências do Python (para uso com pip)
 ├── .gitignore         # Arquivos e pastas a serem ignorados pelo Git
 └── README.md          # Documentação inicial do projeto
