@@ -1,11 +1,1 @@
-# Bibliotecas essenciais para ciência de dados
-numpy==1.26.0       # Manipulação de arrays e operações matemáticas
-pandas==2.1.2       # Manipulação e análise de dados
-scikit-learn==1.4.0 # Modelagem preditiva e aprendizado de máquina
-matplotlib==3.8.1   # Visualizações básicas
-seaborn==0.13.0     # Visualizações estatísticas
 
-# Bibliotecas para notebooks e relatórios
-jupyter==1.0.0      # Interface interativa de notebooks
-jupyterlab==4.0.5   # Alternativa moderna ao Jupyter Notebook
- 
