@@ -20,7 +20,9 @@ Session.vim
 .vscode/*.code-workspace
 
 # Ambiente virtual e arquivos de cache
+venv/
 .venv/
 *.pyc
 *.pyo
 *__pycache__/
+
