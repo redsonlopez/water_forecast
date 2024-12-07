@@ -11,7 +11,7 @@ A organização dos diretórios segue o modelo abaixo:
 ```plaintext
 water_prediction/
 ├── data/
-│   ├── raw/           # Dados brutos (registros originais de 2022, 2023, 2024)
+│   ├── raw/           # Dados brutos (registros originais a partir de 2022)
 │   ├── processed/     # Dados processados para análises e modelagem
 │   └── external/      # Dados de fontes externas (se houver)
 ├── notebooks/
