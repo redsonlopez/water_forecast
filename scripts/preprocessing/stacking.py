@@ -1,3 +1,4 @@
+#%%
 import pandas as pd
 
 columns= [
@@ -33,6 +34,6 @@ for file in files:
 
 df= pd.concat(file_list, ignore_index=True)
 df.columns= columns
+df = df.drop(columns=["residuo"])
 
-df.to_csv("../../data/processed/water.csv", index=False, encoding="utf-8")
-
+df.to_csv("../../data/processed/stacked_water.csv", index=False, encoding="utf-8")
