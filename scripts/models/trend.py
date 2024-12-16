@@ -1,14 +1,9 @@
 #%%
 # Bibliotecas
-###
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.deterministic import DeterministicProcess
 from sklearn.linear_model import LinearRegression
-
-###
-# Leitura e pré-processamento dos dados
-###
 
 # Carregar os dados
 data = pd.read_csv("../../data/processed/processed_water.csv",\
@@ -20,17 +15,13 @@ data = data.set_index('DATA_VENCIMENTO').to_period('D')
 # Selecionar a coluna de interesse
 valor_fatura = data['VALOR_FATURA']
 
-###
-# Exploração e visualização inicial
-###
-
 # Visualizar os valores ao longo do tempo
 ax = valor_fatura.plot(title="Custo de Consumo de Água",\
                        ylabel="Valor da Fatura (R$)", style="o")
 plt.show()
 
 #%%
-# Cálculo da média móvel
+# Visualização com Média Móvel
 ###
 
 # Calcular a média móvel (janela de 3 meses para suavização)
@@ -44,7 +35,7 @@ ax.legend()
 plt.show()
 
 #%%
-# Modelagem da tendência
+# Modelagem da Tendência
 ###
 
 # Criar o conjunto de dados para a modelagem
@@ -59,19 +50,11 @@ model.fit(X, y)
 # Predição dos valores ajustados
 y_pred = pd.Series(model.predict(X), index=X.index)
 
-###
-# Previsão
-###
-
 # Criar conjunto de dados para previsão
 X_fore = dp.out_of_sample(steps=90)
 
 # Fazer a previsão
 y_fore = pd.Series(model.predict(X_fore), index=X_fore.index)
-
-###
-# Visualização da previsão
-###
 
 # Visualizar os resultados
 ax = valor_fatura.plot(alpha=0.5, title="Custo de Consumo de Água com Previsão", ylabel="Valor da Fatura (R$)")
