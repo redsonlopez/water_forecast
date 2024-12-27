@@ -30,10 +30,11 @@ for year in range(2022, 2025):
 file_list= []
 for file in files:
         df= pd.read_csv(f"../../data/raw/{file}", sep=";", encoding="latin1", header=None)
+        #print(f"Arquivo: {file} - Vencimento: {df[8].unique()}") # Check em DATA_VENCIMENTO
         file_list.append(df)
 
 df= pd.concat(file_list, ignore_index=True)
 df.columns= columns
 df = df.drop(columns=["residuo"])
 
-df.to_csv("../../data/processed/stacked_water.csv", index=False, encoding="utf-8")
+#df.to_csv("../../data/processed/stacked_water.csv", index=False, encoding="utf-8")
