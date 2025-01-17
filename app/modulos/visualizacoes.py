@@ -1,6 +1,5 @@
 import plotly.express as px
 import pandas as pd 
-
 import plotly.graph_objects as go
 
 def plotar_serie_temporal(series):
@@ -17,39 +16,25 @@ def plotar_serie_temporal(series):
     return fig
 
 
-
-def plotar_serie_e_previsao(matricula, dados_completos, modelo_treinado):
+def plotar_serie_e_previsao(matricula, dados_matricula, valor_previsto):
     """
     Função para plotar os valores reais da série temporal de uma matrícula, mostrando as datas das faturas no eixo X
-    e o valor futuro previsto.
+    e o valor futuro previsto já calculado externamente.
     
     Args:
         matricula (int): Matrícula para a qual será feita a previsão.
-        dados_completos (pd.DataFrame): Conjunto de dados original contendo todas as informações.
-        modelo_treinado (Pipeline): Modelo treinado (pipeline).
+        dados_matricula (pd.DataFrame): Conjunto de dados original contendo todas as informações referente à matrícula inserida pelo usuário.
+        valor_previsto (float): Valor já previsto para o próximo mês (calculado externamente).
     """
-    # Filtrar os dados históricos da matrícula
-    dados_matricula = dados_completos[dados_completos['MATRICULA'] == matricula]
-
-    if dados_matricula.empty:
-        print(f"Erro: Matrícula {matricula} não encontrada nos dados fornecidos.")
-        return None
+    import plotly.graph_objects as go  # Certifique-se de importar aqui, caso não tenha sido importado globalmente.
 
     # Ordenar os dados pela data de vencimento para consistência na série temporal
     dados_matricula = dados_matricula.sort_values(by=['ANO_VENCIMENTO', 'MES_VENCIMENTO'])
 
     # Criar coluna de datas legíveis
-    dados_matricula['DATA_VENCIMENTO_FORMATADA'] = dados_matricula['MES_VENCIMENTO'].astype(str) + '/' + dados_matricula['ANO_VENCIMENTO'].astype(str)
-
-    # Calcular o valor previsto para o próximo mês
-    dados_matricula_resumo = dados_matricula.mean(numeric_only=True)
-    dados_matricula_resumo['BAIRRO'] = dados_matricula.iloc[-1]['BAIRRO']
-    dados_matricula_resumo['ANO_VENCIMENTO'] = dados_matricula.iloc[-1]['ANO_VENCIMENTO'] + (dados_matricula.iloc[-1]['MES_VENCIMENTO'] // 12)
-    dados_matricula_resumo['MES_VENCIMENTO'] = (dados_matricula.iloc[-1]['MES_VENCIMENTO'] % 12) + 1
-
-    # Gerar a entrada para a previsão
-    X_entrada = pd.DataFrame([dados_matricula_resumo.drop(['VALOR_FATURA'])])
-    valor_previsto = modelo_treinado.predict(X_entrada)[0]
+    dados_matricula['DATA_VENCIMENTO_FORMATADA'] = (
+        dados_matricula['MES_VENCIMENTO'].astype(str) + '/' + dados_matricula['ANO_VENCIMENTO'].astype(str)
+    )
 
     # Adicionar a próxima data prevista no eixo X
     proximo_mes = (dados_matricula.iloc[-1]['MES_VENCIMENTO'] % 12) + 1
@@ -60,18 +45,22 @@ def plotar_serie_e_previsao(matricula, dados_completos, modelo_treinado):
     fig = go.Figure()
 
     # Adicionar linha para os valores reais
-    fig.add_trace(go.Scatter(x=dados_matricula['DATA_VENCIMENTO_FORMATADA'], 
-                             y=dados_matricula['VALOR_FATURA'], 
-                             mode='lines+markers', 
-                             name='Valor Real', 
-                             line=dict(color='blue')))
+    fig.add_trace(go.Scatter(
+        x=dados_matricula['DATA_VENCIMENTO_FORMATADA'], 
+        y=dados_matricula['VALOR_FATURA'], 
+        mode='lines+markers', 
+        name='Valor Real', 
+        line=dict(color='blue')
+    ))
 
     # Adicionar o ponto previsto
-    fig.add_trace(go.Scatter(x=[data_proxima_fatura], 
-                             y=[valor_previsto], 
-                             mode='markers', 
-                             name='Valor Previsto', 
-                             marker=dict(color='red', size=10)))
+    fig.add_trace(go.Scatter(
+        x=[data_proxima_fatura], 
+        y=[valor_previsto], 
+        mode='markers', 
+        name='Valor Previsto', 
+        marker=dict(color='red', size=10)
+    ))
 
     # Configurar o layout do gráfico
     fig.update_layout(
@@ -83,3 +72,6 @@ def plotar_serie_e_previsao(matricula, dados_completos, modelo_treinado):
     )
 
     return fig
+
+
+
