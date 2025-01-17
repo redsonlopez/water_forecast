@@ -64,7 +64,7 @@ xgboost_model = random_search.best_estimator_
 #%%
 # Avalia o modelo com a validação cruzada
 validacao_cruzada = KFold(n_splits=10, shuffle=True, random_state=42)
-cross_val_scores = cross_val_score(model, X_val, y_val, cv=validacao_cruzada)
+cross_val_scores = cross_val_score(xgboost_model, X_val, y_val, cv=validacao_cruzada)
 acuracia_media_xgb = cross_val_scores.mean()
 print(cross_val_scores)
 print("Acurácia média do XGBoost:", acuracia_media_xgb)

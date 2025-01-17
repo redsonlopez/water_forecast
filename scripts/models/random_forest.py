@@ -61,23 +61,86 @@ print("Melhores hiperparâmetros:", random_search.best_params_)
 # Após a busca de hiperparâmetros, obtemos o modelo final treinado com os melhores parâmetros.
 random_forest = random_search.best_estimator_
 
-# %% 
-# Criando a validação cruzada para avaliar o desempenho do modelo.
-# A validação cruzada divide o conjunto de dados em várias "dobras" (folds) para avaliar o modelo em diferentes subconjuntos.
+# %% [markdown]
+# ### Avaliando Resultado dos modelos
+#%%
+# Avalia o modelo com a validação cruzada
 validacao_cruzada = KFold(n_splits=10, shuffle=True, random_state=42)
+cross_val_scores = cross_val_score(random_forest, X_val, y_val, cv=validacao_cruzada)
+acuracia_media_rf = cross_val_scores.mean()
+print(cross_val_scores)
+print("Acurácia média do Random Forest:", acuracia_media_rf)
+
+# Faz previsões com o pipeline ajustado
+y_pred = random_forest.predict(X_val)
+
+# %% [markdown]
+# 1. Mean Absolute Error (MAE)
+# O MAE calcula o erro médio absoluto entre as previsões e os valores reais. Ele é útil para entender o erro médio sem considerar a direção (positivo ou negativo).
+#%%
+from sklearn.metrics import mean_absolute_error
+
+# y_val: valores reais, y_pred: valores previstos
+mae = mean_absolute_error(y_val, y_pred)
+
+# Exibindo o valor do MAE
+print(f"Mean Absolute Error (MAE): {mae}")
+
+
+# %% [markdown]
+# 2. Mean Squared Error (MSE)
+# O MSE calcula o erro quadrado médio. Ele penaliza mais os erros grandes, pois a diferença entre o valor real e o previsto é elevada ao quadrado
+#%%
+from sklearn.metrics import mean_squared_error
+
+# y_val: valores reais, y_pred: valores previstos
+mse = mean_squared_error(y_val, y_pred)
+
+# Exibindo o valor do MSE
+print(f"Mean Squared Error (MSE): {mse}")
+
+# %% [markdown]
+# 3. Root Mean Squared Error (RMSE)
+# O RMSE é a raiz quadrada do MSE. Ele traz a medida do erro para a mesma escala dos dados originais, o que torna mais fácil de interpretar.
+
+#%%
+import numpy as np
+# Calculando o RMSE como a raiz quadrada do MSE
+rmse = np.sqrt(mse)
+
+# Exibindo o valor do RMSE
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+
+
+# %% [markdown]
+# 4. Coefficient of Determination (R²)
+# O R² (ou coeficiente de determinação) mede a proporção da variação nos dados que o modelo é capaz de explicar. Um valor de 1 significa explicação perfeita, enquanto um valor de 0 significa que o modelo não explicou nada além da média.
+#%%
+from sklearn.metrics import r2_score
+
+# y_val: valores reais, y_pred: valores previstos
+r2 = r2_score(y_val, y_pred)
+
+# Exibindo o valor do R²
+print(f"Coefficient of Determination (R²): {r2}")
+
+
+
+
+
+# %% [markdown]
+# 5. Explained Variance Score
+# A Expained Variance Score calcula a variação explicada pelo modelo. Um valor próximo de 1 significa que o modelo explicou a maior parte da variação dos dados.
+#%%
+from sklearn.metrics import explained_variance_score
+
+# y_val: valores reais, y_pred: valores previstos
+explained_variance = explained_variance_score(y_val, y_pred)
+
+# Exibindo o valor do Explained Variance Score
+print(f"Explained Variance Score: {explained_variance}")
 
 # %% 
-# Avalia o modelo com a validação cruzada utilizando o conjunto de validação (X_val, y_val).
-# Isso nos dá uma estimativa da performance do modelo em dados desconhecidos.
-cross_val_score(random_forest, X_val, y_val, cv=validacao_cruzada)
-
-# %% 
-# Calcula a média da acurácia das dobras de validação cruzada.
-# A média é uma boa medida do desempenho geral do modelo.
-acuracia_media_rf = cross_val_score(random_forest, X_val, y_val, cv=validacao_cruzada).mean()
-print("Acurácia média do RandomForest:", acuracia_media_rf)
-
-# %% 
-# Após treinar o modelo e avaliá-lo, podemos salvar o modelo final em um arquivo para uso posterior.
-# O arquivo será salvo com o nome 'base_line.joblib' para fácil carregamento e uso no futuro.
-joblib.dump(random_forest, 'base_line.joblib')
+# Após treinar o modelo e validá-lo, podemos salvar o modelo final em um arquivo para uso posterior.
+# O arquivo será salvo com o nome 'random_forest.joblib' para fácil carregamento e uso no futuro.
+joblib.dump(random_forest, 'random_forest.joblib')
