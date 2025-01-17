@@ -1,7 +1,7 @@
 # %%
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split 
 
@@ -14,13 +14,14 @@ def importar_dados():
         data: dataframe pandas com os dados para o modelo
     """
     # Carregar os dados
-    X_train= pd.read_csv("Train&TestData\\X_train.csv")
-    X_val= pd.read_csv("Train&TestData\\X_val.csv")
-    X_test= pd.read_csv("Train&TestData\\X_test.csv")
-    y_train= pd.read_csv("Train&TestData\\y_train.csv")
-    y_val= pd.read_csv("Train&TestData\\y_val.csv")
-    y_test= pd.read_csv("Train&TestData\\y_test.csv")
+    X_train= pd.read_csv("Train&TestData\\X_train.csv", index_col= False)
+    X_val= pd.read_csv("Train&TestData\\X_val.csv",index_col= False)
+    X_test= pd.read_csv("Train&TestData\\X_test.csv",index_col= False)
+    y_train= pd.read_csv("Train&TestData\\y_train.csv",index_col= False)
+    y_val= pd.read_csv("Train&TestData\\y_val.csv",index_col= False)
+    y_test= pd.read_csv("Train&TestData\\y_test.csv",index_col= False)
     
+    print(X_train.head())
     return  X_train, X_val, X_test, y_train, y_val, y_test
 
 
@@ -49,7 +50,19 @@ def separar_base(data):
     
     return X_train, X_val, X_test, y_train, y_val, y_test
     
+def remover_colunas(data): 
+    """Remove colunas que não são relevantes para nosso modelo 
+    """
+    drop_features = [
+                    'Unnamed: 0', 'MATRICULA', 'DATA_VENCIMENTO', # irrelevante
+                     'VOLUME_FATURA_AGUA','VOLUME_FATURA_ESGOTO', 'VOLUME_MEDIDO_AGUA', 'VOLUME_MEDIDO_ESGOTO',#Removendo colunas para evitar o data leakage
+                     'BAIRRO'# Estamos removendo o bairro por sua alta dimensionalide 
+                     ]
+    data = data.drop(columns = drop_features)
     
+    return data 
+
+
 def preprocessar_dados():
 
     """
@@ -59,30 +72,17 @@ def preprocessar_dados():
     """    
         
     # Selecionando variaveis numericas, categoricas e variaveis que devem ser removidas para evitar data leakage
-    numerical_features = ['VALOR_FATURA']
-    categorical_features = ['BAIRRO']
+    numerical_features = ['VALOR_FATURA_lag1','VALOR_FATURA_lag2']
     ordinal_features = ['ANO_VENCIMENTO', 'MES_VENCIMENTO']
-    index = ['DATA_FATURA']
-    drop_features = ['Unnamed: 0', 'MATRICULA', 'VOLUME_FATURA_AGUA',
-                    'VOLUME_FATURA_ESGOTO', 'VOLUME_MEDIDO_AGUA', 'VOLUME_MEDIDO_ESGOTO']
+
     
-    # Pré-processamento
-    # Configura um transformador para aplicar diferentes preprocessamentos às colunas:
-    # - StandardScaler: Normaliza valores numéricos (para que todos tenham média 0 e desvio padrão 1).
-    # - OneHotEncoder: Converte valores categóricos em formato binário.
+   
     preprocessor = ColumnTransformer(
         transformers=[
             # Aplica escalonamento aos dados numéricos.
             ('num', StandardScaler(), numerical_features),
-            # Aplica codificação one-hot aos dados categóricos.
-            ('cat', OneHotEncoder(), categorical_features),
-            # Não vamos fazer nada com as variaveis ordinais porque elas já estão no formato esperado
-            # Removendo colunas para evitar o data leakage
-            ('drop', "drop", drop_features)
         
-        ]
-
-    )
+        ])
 
     
     return preprocessor

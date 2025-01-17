@@ -1,6 +1,8 @@
 #%% 
 import pandas as pd 
 import numpy as np 
+from sklearn.preprocessing import  OneHotEncoder
+
 
 pd.set_option('display.max_rows', None)
 
@@ -28,6 +30,7 @@ for col in colunas:
 # Removendo todas as faturas que estão zeradas:
 data = data[data['VALOR_FATURA'] != 0]
 data.head()
+data.info()
 # %%
 
 # Extraindo Ano e Mês de vencimento das faturas
@@ -73,7 +76,6 @@ data = criar_lags_por_matricula(data, col='VALOR_FATURA', id_col='MATRICULA', ma
 
 # %% 
 data = data.sort_values(by=['DATA_VENCIMENTO'], ascending=[True])
-
 
 #%% [markdown]
 # > Como Veremos abaixo, existem diversos valores onde todos os valores correspondentes 
