@@ -32,24 +32,22 @@ pipeline = Pipeline(steps=[
 # %% 
 # Definindo os parâmetros a serem testados durante a busca de hiperparâmetros.
 # Estamos utilizando uma distribuição aleatória para parâmetros como 'n_estimators' e 'max_depth'.
+# Espaço de busca para os hiperparâmetros do RandomForest
 param_distributions = {
-    'n_estimators': randint(100, 1000),  # Número de árvores a serem usadas no modelo.
-    'max_depth': randint(10, 50),  # Profundidade máxima de cada árvore.
-    'min_samples_split': randint(2, 20),  # Número mínimo de amostras para dividir um nó.
-    'min_samples_leaf': randint(1, 10),  # Número mínimo de amostras em um nó folha.
-    'max_features': ['sqrt', 'log2', None],  # Como selecionar as features para dividir os nós.
+    'regressor__max_depth': [10, 20, 30, None],
+    'regressor__n_estimators': [100, 200, 300],
+    'regressor__min_samples_split': [2, 5, 10]
 }
 
 # RandomizedSearchCV realiza uma busca aleatória nos parâmetros definidos acima.
 # Ele testa combinações aleatórias e avalia qual combinação tem o melhor desempenho.
+# Realiza a busca de hiperparâmetros
 random_search = RandomizedSearchCV(
-    pipeline,  # O pipeline com o pré-processamento e o modelo.
-    param_distributions,  # O espaço de busca para os hiperparâmetros.
-    n_iter=10,  # Número de iterações para testar combinações aleatórias.
-    cv=3,  # Número de divisões (folds) para validação cruzada durante a busca.
-    scoring='neg_mean_absolute_error',  # A métrica a ser otimizada (erro absoluto médio negativo).
-    n_jobs=-1,  # Utiliza todos os núcleos de processamento disponíveis para acelerar a busca.
-    random_state=42  # Garante a reprodutibilidade da busca aleatória.
+    pipeline,
+    param_distributions,
+    n_iter=10,  # Número de combinações aleatórias a serem testadas
+    cv=5,  # Número de folds para validação cruzada
+    random_state=42
 )
 
 # Realiza a busca de hiperparâmetros ajustando o modelo aos dados de treinamento.

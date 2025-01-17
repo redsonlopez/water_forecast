@@ -44,7 +44,7 @@ random_search = RandomizedSearchCV(
     pipeline,  # O pipeline com o pré-processamento e o modelo.
     param_distributions,  # O espaço de busca para os hiperparâmetros.
     n_iter=10,  # Número de iterações para testar combinações aleatórias.
-    cv=3,  # Número de divisões (folds) para validação cruzada durante a busca.
+    cv=5,  # Número de divisões (folds) para validação cruzada durante a busca.
     scoring='neg_mean_absolute_error',  # A métrica a ser otimizada (erro absoluto médio negativo).
     n_jobs=-1,  # Utiliza todos os núcleos de processamento disponíveis para acelerar a busca.
     random_state=42  # Garante a reprodutibilidade da busca aleatória.
