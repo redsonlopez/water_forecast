@@ -3,7 +3,7 @@ import joblib
 import pandas as pd
 
 # Carregar o modelo treinado
-modelo_carregado = joblib.load(r'C:\Users\maype\Desktop\projetos\water_forecast\scripts\models\modelo_fatura.joblib')
+modelo_carregado = joblib.load("scripts/models/base_line.joblib")
 
 def prever_series(series):
     """

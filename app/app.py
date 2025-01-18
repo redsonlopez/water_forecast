@@ -7,7 +7,7 @@ from modulos.modelagem import prever_series
 import joblib
 
 # Carregar o modelo treinado
-modelo_carregado = joblib.load(r'C:\Users\maype\Desktop\projetos\water_forecast\scripts\models\modelo_fatura.joblib')
+modelo_carregado = joblib.load("scripts/models/base_line.joblib")
 
 # Configurações do app
 st.title("Gestão de Consumo de Água - Prefeitura")
