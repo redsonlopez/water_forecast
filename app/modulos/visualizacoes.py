@@ -64,7 +64,7 @@ def plotar_serie_e_previsao(matricula, dados_matricula, valor_previsto):
 
     # Configurar o layout do gráfico
     fig.update_layout(
-        title=f'Série Temporal de Valores Reais e Previsão para Matrícula {matricula}',
+        title=f'Série Temporal de Valores Reais e Previsão para Matrícula: {matricula}',
         xaxis_title='Data de Vencimento',
         yaxis_title='Valor da Fatura (R$)',
         xaxis=dict(tickangle=45),
